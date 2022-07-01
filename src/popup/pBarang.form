@@ -32,9 +32,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane1" alignment="1" min="-2" pref="453" max="-2" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="jTextField1" min="-2" pref="130" max="-2" attributes="0"/>
+                              <Component id="tCari" min="-2" pref="130" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="tCari" min="-2" max="-2" attributes="0"/>
+                              <Component id="bCari" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -50,8 +50,8 @@
               <Component id="jLabel5" min="-2" pref="39" max="-2" attributes="0"/>
               <EmptySpace pref="32" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="bCari" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tCari" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="265" max="-2" attributes="0"/>
@@ -94,15 +94,15 @@
         <Property name="text" type="java.lang.String" value="Tabel Barang"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="tCari">
+    <Component class="javax.swing.JButton" name="bCari">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cari"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tCariActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bCariActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextField1">
+    <Component class="javax.swing.JTextField" name="tCari">
     </Component>
   </SubComponents>
 </Form>

@@ -12,6 +12,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
+import koneksi.save;
 
 
 /**
@@ -19,7 +20,7 @@ import koneksi.koneksi;
  * @author ellz
  */
 public class pBarang extends javax.swing.JFrame {
-    private String idbarang;
+    //public stokkeluar idbarang = null;
     public static DefaultTableModel tabmode;
     private Connection conn = new koneksi().connect();
 
@@ -35,10 +36,10 @@ public class pBarang extends javax.swing.JFrame {
     Object[] Baris ={"Id","Nama","Jenis","stok","Harga"};
     tabmode = new DefaultTableModel(null, Baris);
     tbBarang.setModel(tabmode);
-    String cariitem=tCari.getText();
+    String cariitem = tCari.getText();
     
     try {
-        String sql = "SELECT * FROM barang";
+        String sql = "SELECT * FROM barang WHERE id_brg like '%"+cariitem+"%'";
         Statement stat = conn.createStatement();
         ResultSet hasil = stat.executeQuery(sql);
         while (hasil.next()){
@@ -54,14 +55,6 @@ public class pBarang extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "data gagal dipanggil"+e);
         }
     }
-    
-    public String getIdBarang() {
-        return idbarang;
-    }
-    
-    public void setIdBarang(String idBrg){
-        this.idbarang = idBrg;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,8 +68,8 @@ public class pBarang extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbBarang = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
-        tCari = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        bCari = new javax.swing.JButton();
+        tCari = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -102,10 +95,10 @@ public class pBarang extends javax.swing.JFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Tabel Barang");
 
-        tCari.setText("Cari");
-        tCari.addActionListener(new java.awt.event.ActionListener() {
+        bCari.setText("Cari");
+        bCari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tCariActionPerformed(evt);
+                bCariActionPerformed(evt);
             }
         });
 
@@ -122,9 +115,9 @@ public class pBarang extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tCari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tCari)))
+                                .addComponent(bCari)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
@@ -134,8 +127,8 @@ public class pBarang extends javax.swing.JFrame {
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tCari)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bCari)
+                    .addComponent(tCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -148,17 +141,20 @@ public class pBarang extends javax.swing.JFrame {
         // TODO add your handling code here:
         int tb = tbBarang.getSelectedRow();  
         String id = tbBarang.getValueAt(tb, 0).toString(); 
-//        pBarang barang = new pBarang();
+//        save barang = new save();
 //        barang.setIdBarang(id);
+        save sv = new save();
+        sv.setIdBarang(id);
         stokkeluar sk = new stokkeluar();
-        sk.setIDbrg(id);
+//        sk.setBarang();
+        sk.show();
         this.dispose();
     }//GEN-LAST:event_tbBarangMouseClicked
 
-    private void tCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tCariActionPerformed
+    private void bCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCariActionPerformed
         // TODO add your handling code here:
         datatable();
-    }//GEN-LAST:event_tCariActionPerformed
+    }//GEN-LAST:event_bCariActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,10 +192,10 @@ public class pBarang extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bCari;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JButton tCari;
+    private javax.swing.JTextField tCari;
     private javax.swing.JTable tbBarang;
     // End of variables declaration//GEN-END:variables
 

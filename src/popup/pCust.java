@@ -5,17 +5,53 @@
  */
 package popup;
 
+import form.stokkeluar;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
+import koneksi.save;
+
 /**
  *
  * @author ellz
  */
 public class pCust extends javax.swing.JFrame {
+    public static DefaultTableModel tabmode;
+    private Connection conn = new koneksi().connect();
+    //public stokkeluar sk  = null;
 
     /**
      * Creates new form pBarang
      */
     public pCust() {
         initComponents();
+        datatable();
+    }
+    
+    protected void datatable(){
+    Object[] Baris ={"Id","Nama","alamat","telp"};
+    tabmode = new DefaultTableModel(null, Baris);
+    tbCust.setModel(tabmode);
+    //String cariitem=tCari.getText();
+    
+    try {
+        String sql = "SELECT * FROM customer";
+        Statement stat = conn.createStatement();
+        ResultSet hasil = stat.executeQuery(sql);
+        while (hasil.next()){
+            String id = hasil.getString("id_cust");
+            String nama = hasil.getString("nama_cust");
+            String alamat = hasil.getString("alamat_cust");
+            String telp = hasil.getString("telp_cust");
+            String[] data = {id,nama,alamat,telp};
+            tabmode.addRow(data);
+        }
+    }catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "data gagal dipanggil"+e);
+        }
     }
 
     /**
@@ -46,6 +82,11 @@ public class pCust extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbCust.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbCustMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbCust);
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
@@ -88,6 +129,19 @@ public class pCust extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tbCustMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbCustMouseClicked
+        // TODO add your handling code here:
+        int c = tbCust.getSelectedRow();
+        String id = tbCust.getValueAt(c, 0).toString();
+//        sk.itemTerpilihCust();
+        save sv = new save();
+        sv.setIdCust(id);
+        stokkeluar sk = new stokkeluar();
+//        sk.setCust();
+        sk.show();
+        this.dispose();
+    }//GEN-LAST:event_tbCustMouseClicked
 
     /**
      * @param args the command line arguments
