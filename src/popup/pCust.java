@@ -5,7 +5,7 @@
  */
 package popup;
 
-import form.stokkeluar;
+import form.penjualan;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -137,7 +137,7 @@ public class pCust extends javax.swing.JFrame {
 //        sk.itemTerpilihCust();
         save sv = new save();
         sv.setIdCust(id);
-        stokkeluar sk = new stokkeluar();
+        penjualan sk = new penjualan();
 //        sk.setCust();
         sk.show();
         this.dispose();

@@ -4,10 +4,12 @@
  */
 package form;
 
+import static form.penjualan.tabmode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 import koneksi.save;
 import popup.pBarang;
@@ -27,6 +29,13 @@ public class stokmasuk extends javax.swing.JFrame {
         initComponents();
         setBarang();
         setCust();
+        tableStok();
+    }
+    
+    protected void tableStok(){
+        Object[] Baris ={"Nama","QTY","Harga"};
+        tabmode = new DefaultTableModel(null, Baris);
+        TabelStok.setModel(tabmode);
     }
     
     public void setBarang(){
@@ -225,7 +234,7 @@ public class stokmasuk extends javax.swing.JFrame {
                         .addComponent(tIdCust, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

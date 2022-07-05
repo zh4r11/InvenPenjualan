@@ -5,8 +5,12 @@
 package form;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
@@ -16,7 +20,7 @@ import koneksi.save;
  *
  * @author ellz
  */
-public class stokkeluar extends javax.swing.JFrame {
+public class penjualan extends javax.swing.JFrame {
     private Connection conn = new koneksi().connect();
     int harga = 0;
     public static DefaultTableModel tabmode;
@@ -24,7 +28,7 @@ public class stokkeluar extends javax.swing.JFrame {
     /**
      * Creates new form stokkeluar
      */
-    public stokkeluar() {
+    public penjualan() {
         initComponents();
         autonumber();
         tableStok();
@@ -33,11 +37,36 @@ public class stokkeluar extends javax.swing.JFrame {
     protected void tableStok(){
         Object[] Baris ={"Nama","QTY","Harga"};
         tabmode = new DefaultTableModel(null, Baris);
-        TabelStok.setModel(tabmode);
+        TabelPenj.setModel(tabmode);
+    }
+    
+    protected void kosong(){
+        tIdPenj.setText("");
+        tIdCust.setText("");
+        tNmCust.setText("");
+        tIdBrg.setText("");
+        tNmBrg.setText("");
+        tQty.setText("");
+        tTotal.setText("");
+        
+        int baris = tabmode.getRowCount();
+        for(int a=0;a<baris;a++){
+            tabmode.removeRow(0);
+        }
+    }
+    
+    protected void hitungTotal(){
+        int total = 0;
+        int baris = tabmode.getRowCount();
+        for(int a=0;a<baris;a++){
+            int harga = Integer.valueOf(tabmode.getValueAt(a, 2).toString());
+            total += harga;
+        }
+        tTotal.setText(Integer.toString(total));
     }
     
     protected void datatableBarang(){
-    Object[] Baris ={"Id","Nama","Jenis","stok","Harga"};
+    Object[] Baris ={"Id","Nama","Jenis","Stok","Harga"};
     DefaultTableModel tabmodebarang = new DefaultTableModel(null, Baris);
     tbBarang.setModel(tabmodebarang);
     String cariitem = tCari.getText();
@@ -78,7 +107,7 @@ public class stokkeluar extends javax.swing.JFrame {
                 String alamat = hasil.getString("alamat_cust");
                 String telp = hasil.getString("telp_cust");
                 String[] data = {id,nama,alamat,telp};
-                tabmode.addRow(data);
+                tabmodeCust.addRow(data);
             }
         }catch (Exception e) 
         {
@@ -90,12 +119,12 @@ public class stokkeluar extends javax.swing.JFrame {
     
     protected void autonumber(){
         try{
-            String sql = "SELECT id_skel FROM stok_keluar order by id_skel asc";
+            String sql = "SELECT id_penj FROM penjualan order by id_penj asc";
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            tIdStokKel.setText("SK0001");
+            tIdPenj.setText("INV0001");
             while (rs.next()){
-                String no_stok = rs.getString("id_skel").substring(2);
+                String no_stok = rs.getString("id_penj").substring(3);
                 int AN = Integer.parseInt(no_stok) + 1;
                 String Nol = "";
                 
@@ -108,7 +137,7 @@ public class stokkeluar extends javax.swing.JFrame {
                 else if (AN<10000)
                 {Nol = "";}
                 
-                tIdStokKel.setText("SK" + Nol + AN);
+                tIdPenj.setText("INV" + Nol + AN);
             }
         }catch (Exception e){
             JOptionPane.showMessageDialog(null, "Auto Number Gagal" +e);
@@ -138,7 +167,7 @@ public class stokkeluar extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        tIdStokKel = new javax.swing.JTextField();
+        tIdPenj = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -156,8 +185,8 @@ public class stokkeluar extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TabelStok = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        TabelPenj = new javax.swing.JTable();
+        tTotal = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         bSimpan = new javax.swing.JButton();
         bBatal = new javax.swing.JButton();
@@ -293,11 +322,11 @@ public class stokkeluar extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Stok Keluar");
+        jLabel5.setText("PENJUALAN");
 
-        jLabel6.setText("No. Stok Keluar");
+        jLabel6.setText("No. Penjualan");
 
-        tIdStokKel.setEditable(false);
+        tIdPenj.setEditable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Barang"));
 
@@ -417,7 +446,7 @@ public class stokkeluar extends javax.swing.JFrame {
                         .addComponent(tIdCust, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,7 +463,7 @@ public class stokkeluar extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        TabelStok.setModel(new javax.swing.table.DefaultTableModel(
+        TabelPenj.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -445,20 +474,33 @@ public class stokkeluar extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        TabelStok.addMouseListener(new java.awt.event.MouseAdapter() {
+        TabelPenj.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TabelStokMouseClicked(evt);
+                TabelPenjMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(TabelStok);
+        jScrollPane1.setViewportView(TabelPenj);
+
+        tTotal.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        tTotal.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Total");
 
         bSimpan.setText("Simpan");
+        bSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSimpanActionPerformed(evt);
+            }
+        });
 
         bBatal.setText("Batal");
+        bBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBatalActionPerformed(evt);
+            }
+        });
 
         bKeluar.setText("Keluar");
 
@@ -478,7 +520,7 @@ public class stokkeluar extends javax.swing.JFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel6)
                                     .addGap(18, 18, 18)
-                                    .addComponent(tIdStokKel, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tIdPenj, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
@@ -494,7 +536,7 @@ public class stokkeluar extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(tTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -505,7 +547,7 @@ public class stokkeluar extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(tIdStokKel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tIdPenj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -520,7 +562,7 @@ public class stokkeluar extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
         );
@@ -542,7 +584,7 @@ public class stokkeluar extends javax.swing.JFrame {
 
     private void bTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTambahActionPerformed
         // TODO add your handling code here:
-        TabelStok.setModel(tabmode);
+        TabelPenj.setModel(tabmode);
         int xqty = Integer.parseInt(tQty.getText());
         int xharga = xqty * harga;
         
@@ -552,6 +594,7 @@ public class stokkeluar extends javax.swing.JFrame {
         tIdBrg.setText("");
         tNmBrg.setText("");
         tQty.setText("");
+        hitungTotal();
     }//GEN-LAST:event_bTambahActionPerformed
 
     private void bCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCariActionPerformed
@@ -585,19 +628,70 @@ public class stokkeluar extends javax.swing.JFrame {
         datatableCust();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void TabelStokMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelStokMouseClicked
+    private void TabelPenjMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelPenjMouseClicked
         // TODO add your handling code here:
-        int c = TabelStok.getSelectedRow();
-        tIdBrg.setText(TabelStok.getValueAt(c, 0).toString());
-        tNmBrg.setText(TabelStok.getValueAt(c, 1).toString());
-        tQty.setText(TabelStok.getValueAt(c, 2).toString());
-    }//GEN-LAST:event_TabelStokMouseClicked
+//        int c = TabelPenj.getSelectedRow();
+//        tIdBrg.setText(TabelPenj.getValueAt(c, 0).toString());
+//        tNmBrg.setText(TabelPenj.getValueAt(c, 1).toString());
+//        tQty.setText(TabelPenj.getValueAt(c, 2).toString());
+    }//GEN-LAST:event_TabelPenjMouseClicked
 
     private void bHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bHapusActionPerformed
         // TODO add your handling code here:
-        int c = TabelStok.getSelectedRow();
+        int c = TabelPenj.getSelectedRow();
         tabmode.removeRow(c);
     }//GEN-LAST:event_bHapusActionPerformed
+
+    private void bSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimpanActionPerformed
+        String tgl = new SimpleDateFormat("yyyy-MM-dd",new java.util.Locale("id")).format(new java.util.Date());
+        String sql = "insert into penjualan values (?,?,?,?)";
+        String zsql = "insert into isi_penjualan values (?,?,?)";
+        try{
+            PreparedStatement stat = conn.prepareStatement(sql);
+            stat.setString(1,tIdPenj.getText());
+            stat.setString(2,tIdCust.getText());
+            stat.setString(3,"1");
+            stat.setString(4,tgl);
+            stat.executeUpdate();
+            
+            try{
+                int t = TabelPenj.getRowCount();
+                for(int i = 0; i < t; i++){
+                    String xnm = TabelPenj.getValueAt(i,0).toString();
+                    String xqty = TabelPenj.getValueAt(i,1).toString();
+                    String xharga = TabelPenj.getValueAt(i,2).toString();
+                    String ID = "";
+                    
+                    String sqly = "SELECT id_barang FROM barang where nama_brg = '"+xnm+"' and harga_brg ='"+xharga+"'";
+                    ResultSet hasil = stat.executeQuery(sqly);
+                    while (hasil.next()){
+                        ID = hasil.getString("id_brg");
+                    }
+                    
+                    PreparedStatement stat2 = conn.prepareStatement(zsql);
+                    stat2.setString(1,tIdPenj.getText());
+                    stat2.setString(2,ID);
+                    stat2.setString(3,xqty);
+                    stat2.executeUpdate();
+                }
+            }catch(Exception e){
+            }
+            
+            JOptionPane.showMessageDialog(null,"Data Berhasil Disimpan");
+
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null,"Data Gagal Disimpan"+e);
+        }
+        autonumber();
+        kosong();
+    }//GEN-LAST:event_bSimpanActionPerformed
+
+    private void bBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBatalActionPerformed
+        // TODO add your handling code here:
+        kosong();
+        autonumber();
+    }//GEN-LAST:event_bBatalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -616,26 +710,27 @@ public class stokkeluar extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(stokkeluar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(penjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(stokkeluar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(penjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(stokkeluar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(penjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(stokkeluar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(penjualan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new stokkeluar().setVisible(true);
+                new penjualan().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable TabelStok;
+    private javax.swing.JTable TabelPenj;
     private javax.swing.JButton bBatal;
     private javax.swing.JButton bCari;
     private javax.swing.JButton bHapus;
@@ -662,15 +757,15 @@ public class stokkeluar extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField tCari;
     private javax.swing.JTextField tIdBrg;
     private javax.swing.JTextField tIdCust;
-    private javax.swing.JTextField tIdStokKel;
+    private javax.swing.JTextField tIdPenj;
     private javax.swing.JTextField tNmBrg;
     private javax.swing.JTextField tNmCust;
     private javax.swing.JTextField tQty;
+    private javax.swing.JTextField tTotal;
     private javax.swing.JTable tbBarang;
     private javax.swing.JTable tbCust;
     // End of variables declaration//GEN-END:variables
