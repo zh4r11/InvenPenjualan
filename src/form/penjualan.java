@@ -503,6 +503,11 @@ public class penjualan extends javax.swing.JFrame {
         });
 
         bKeluar.setText("Keluar");
+        bKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bKeluarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -693,6 +698,10 @@ public class penjualan extends javax.swing.JFrame {
         autonumber();
     }//GEN-LAST:event_bBatalActionPerformed
 
+    private void bKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bKeluarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_bKeluarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -770,7 +779,4 @@ public class penjualan extends javax.swing.JFrame {
     private javax.swing.JTable tbCust;
     // End of variables declaration//GEN-END:variables
 
-//    public void setBarang() {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
 }
